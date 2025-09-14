@@ -1,0 +1,51 @@
+	local player = game.Players.LocalPlayer
+	local character = player.Character or player.CharacterAdded:Wait()
+
+	local tool = Instance.new("Tool")
+	tool.Name = "PlatformTool"
+	tool.RequiresHandle = false
+
+	local handle = Instance.new("Part")
+	handle.Name = "Handle"
+	handle.Size = Vector3.new(1, 1, 1)
+	handle.Transparency = 1
+	handle.Parent = tool
+
+	local platformSize = Vector3.new(5, 1, 5)
+	local platformInterval = 0.1
+	local platformLifetime = 2
+	local spawnDistance = 3
+	local movingThreshold = 0.1
+
+	local function createPlatform(position)
+		local platform = Instance.new("Part")
+		platform.Size = platformSize
+		platform.Anchored = true
+		platform.CanCollide = true
+		platform.Material = Enum.Material.Neon
+		platform.Color = Color3.new(math.random(), math.random(), math.random())
+		platform.CFrame = CFrame.new(position)
+		platform.Parent = workspace
+
+		game:GetService("Debris"):AddItem(platform, platformLifetime)
+	end
+
+	local function isMoving(rootPart)
+		return rootPart.Velocity.magnitude > movingThreshold
+	end
+
+	local function startSpawningPlatforms()
+		while tool.Parent == player.Character do
+			local rootPart = character:FindFirstChild("HumanoidRootPart")
+			if rootPart and isMoving(rootPart) then
+				local spawnPosition = rootPart.Position - Vector3.new(0, spawnDistance, 0)
+				createPlatform(spawnPosition)
+			end
+			wait(platformInterval)
+		end
+	end
+
+	tool.Equipped:Connect(startSpawningPlatforms)
+
+	-- give tool
+	tool.Parent = player.Backpack
