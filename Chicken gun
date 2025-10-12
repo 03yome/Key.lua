@@ -151,6 +151,19 @@ game:GetService("Players").LocalPlayer.Character:WaitForChild("Npc Spawner"):Wai
 
 print("HI")
 end)
+local KillingCheats = PhantomForcesWindow:NewSection("lag.servet")
+
+KillingCheats:CreateButton("ammo", function()
+
+local args = {
+	CFrame.new(-27.889087677001953, 111.433837890625, 108.04716491699219, 0.7849109768867493, -1.7152846254475662e-08, -0.6196085214614868, 4.7655586143946493e-08, 1, 3.268603521178193e-08, 0.6196085214614868, -5.518343826338423e-08, 0.7849109768867493),
+	game:GetService("ReplicatedStorage"):WaitForChild("SpawnableBuild"):WaitForChild("AmmoBox"),
+	game:GetService("ReplicatedStorage"):WaitForChild("SpawnableBuild"):WaitForChild("AmmoBox"):WaitForChild("Variation"):WaitForChild("Heavy")
+}
+game:GetService("Players").LocalPlayer.Character:WaitForChild("Build Spawner"):WaitForChild("HologramEvent"):FireServer(unpack(args))
+print("HI")
+end)
+
 local KillingCheats = PhantomForcesWindow:NewSection("create")
 KillingCheats:CreateButton("by Romd3907", function()
 print("HI")
