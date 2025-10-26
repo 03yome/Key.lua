@@ -174,6 +174,25 @@ game:GetService("ReplicatedStorage").Events.ToolsEvent:FireServer(unpack(args))
 print("HI")
 end)
 
+KillingCheats:CreateButton("hAnDgUn", function()
+local args = {
+    [1] = game:GetService("Players").LocalPlayer.WeaponsInventory.hAnDgUn
+}
+
+game:GetService("ReplicatedStorage").Events.ToolsEvent:FireServer(unpack(args))
+print("HI")
+end)
+
+KillingCheats:CreateButton("handgun", function()
+
+local args = {
+    [1] = game:GetService("Players").LocalPlayer.WeaponsInventory.handgun
+}
+
+game:GetService("ReplicatedStorage").Events.ToolsEvent:FireServer(unpack(args))
+print("HI")
+end)
+
 local KillingCheats = PhantomForcesWindow:NewSection("create")
 KillingCheats:CreateButton("by Romd3907", function()
 print("HI")
