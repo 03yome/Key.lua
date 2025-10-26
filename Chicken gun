@@ -164,6 +164,16 @@ game:GetService("Players").LocalPlayer.Character:WaitForChild("Build Spawner"):W
 print("HI")
 end)
 
+local KillingCheats = PhantomForcesWindow:NewSection("Gears")
+KillingCheats:CreateButton("Admin.gun", function()
+local args = {
+    [1] = game:GetService("Players").LocalPlayer.WeaponsInventory.AdminGun
+}
+
+game:GetService("ReplicatedStorage").Events.ToolsEvent:FireServer(unpack(args))
+print("HI")
+end)
+
 local KillingCheats = PhantomForcesWindow:NewSection("create")
 KillingCheats:CreateButton("by Romd3907", function()
 print("HI")
