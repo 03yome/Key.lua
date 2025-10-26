@@ -29,6 +29,15 @@ local args = {
 game:GetService("Players").LocalPlayer.Character:WaitForChild("Handgun"):WaitForChild("Events"):WaitForChild("SpareAmmoEvent"):FireServer(unpack(args))
 print("HI")
 end)
+
+KillingCheats:CreateButton("Inf hAnDgUn", function()
+local args = {
+	999
+}
+game:GetService("Players").LocalPlayer.Character:WaitForChild("hAnDgUn"):WaitForChild("Events"):WaitForChild("SpareAmmoEvent"):FireServer(unpack(args))
+print("HI")
+end)
+
 local KillingCheats = PhantomForcesWindow:NewSection("Badge")
 KillingCheats:CreateButton("PitchFork", function()
 
@@ -186,7 +195,7 @@ end)
 KillingCheats:CreateButton("handgun", function()
 
 local args = {
-    [1] = game:GetService("Players").LocalPlayer.WeaponsInventory.handgun
+    [1] = game:GetService("Players").LocalPlayer.WeaponsInventory.Handgun
 }
 
 game:GetService("ReplicatedStorage").Events.ToolsEvent:FireServer(unpack(args))
