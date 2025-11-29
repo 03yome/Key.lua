@@ -1,0 +1,174 @@
+--[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+if game:GetService("CoreGui"):FindFirstChild("ToraScript") then
+	game:GetService("CoreGui").ToraScript:Destroy()
+end
+
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/liebertsx/Tora-Library/main/src/librarynew", true))()
+local Window = Library:CreateWindow("all game!")
+
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
+local ProximityPromptService = game:GetService("ProximityPromptService")
+
+local LocalPlayer = Players.LocalPlayer
+
+-- Global State Variables
+_G.Steals = false
+
+-- WalkSpeed Variable
+local TargetWalkSpeed = 32
+
+Window:AddToggle({
+	text = "Instant Steals",
+	flag = "toggle",
+	state = false,
+	callback = function(Value)
+		_G.Steals = Value
+		print("Steals:", Value)
+		
+		task.spawn(function()
+			while _G.Steals do
+				task.wait()
+				local Character = LocalPlayer.Character
+				
+				-- Check if player has a stolen object
+				if Character and Character:FindFirstChild("HumanoidRootPart") and Character:FindFirstChild("StolenObject") then
+					local RootPart = Character.HumanoidRootPart
+					local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+					
+					if Humanoid and MyTycoon then
+						-- Calculate destination and time
+						local SafeZone = Workspace.Map.Tycoons[MyTycoon.Name].TycoonSpawnLoc.CFrame * CFrame.new(0, 70, 0)
+						local Distance = (RootPart.Position - SafeZone.Position).Magnitude
+						local Speed = Humanoid.WalkSpeed or 20
+						local TravelTime = Distance / Speed
+						
+						-- Teleport Up
+						RootPart.CFrame = RootPart.CFrame * CFrame.new(0, 70, 0)
+						task.wait(1)
+						
+						-- Teleport to Safe Zone
+						RootPart.CFrame = SafeZone
+						
+						-- Create/Get Loading Bar UI
+						local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+						local LoadingGui = PlayerGui:FindFirstChild("LoadingBarGui")
+						
+						if not LoadingGui then
+							LoadingGui = Instance.new("ScreenGui")
+							LoadingGui.Name = "LoadingBarGui"
+							LoadingGui.ResetOnSpawn = false
+							LoadingGui.Parent = PlayerGui
+							
+							local MainFrame = Instance.new("Frame", LoadingGui)
+							MainFrame.Name = "MainFrame"
+							MainFrame.Size = UDim2.new(0, 300, 0, 30)
+							MainFrame.Position = UDim2.new(0.5, -150, 0.8, 0)
+							MainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+							MainFrame.BorderSizePixel = 0
+							MainFrame.Visible = false
+							Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
+							
+							local Bar = Instance.new("Frame", MainFrame)
+							Bar.Name = "Bar"
+							Bar.Size = UDim2.new(0, 0, 1, 0)
+							Bar.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+							Bar.BorderSizePixel = 0
+							Instance.new("UICorner", Bar).CornerRadius = UDim.new(0, 10)
+							
+							local Label = Instance.new("TextLabel", MainFrame)
+							Label.Name = "Label"
+							Label.Size = UDim2.new(1, 0, 1, 0)
+							Label.BackgroundTransparency = 1
+							Label.Text = "Wait..."
+							Label.TextColor3 = Color3.new(1, 1, 1)
+							Label.TextScaled = true
+							Label.Font = Enum.Font.GothamBold
+						end
+						
+						local MainFrame = LoadingGui.MainFrame
+						local Bar = MainFrame.Bar
+						
+						-- Animate Bar
+						MainFrame.Visible = true
+						Bar.Size = UDim2.new(0, 0, 1, 0)
+						local Tween = TweenService:Create(Bar, TweenInfo.new(TravelTime, Enum.EasingStyle.Linear), {
+							Size = UDim2.new(1, 0, 1, 0)
+						})
+						Tween:Play()
+						Tween.Completed:Wait()
+						MainFrame.Visible = false
+						
+						-- Deposit Item
+						for _, tycoon in pairs(Workspace.Map.Tycoons:GetChildren()) do
+							if tycoon:GetAttribute("Owner") == LocalPlayer.Name then
+								for _, part in pairs(tycoon.Tycoon.CollectZone:GetChildren()) do
+									if part.Name == "CollectPart" then
+										firetouchinterest(RootPart, part, 0)
+										task.wait()
+										firetouchinterest(RootPart, part, 1)
+									end
+								end
+							end
+						end
+						
+						task.wait(1)
+					end
+				end
+			end
+		end)
+	end,
+})
+
+local function StartAutoLock()
+	task.spawn(function()
+		_G.Lock = true
+		while _G.Lock do
+			task.wait()
+			pcall(function()
+				local Character = LocalPlayer.Character
+				if not Character then return end
+				local RootPart = Character:WaitForChild("HumanoidRootPart")
+				local OriginalCFrame = RootPart.CFrame
+				
+				for _, tycoon in pairs(Workspace.Map.Tycoons:GetChildren()) do
+					if tycoon:GetAttribute("Owner") == LocalPlayer.Name then
+						local Buttons = tycoon.Tycoon.ForcefieldFolder.Buttons
+						for _, button in pairs(Buttons:GetChildren()) do
+							if button.Name == "ForceFieldBuy" then
+								local TimeText = button.Parent.Parent.Screen.Screen.SurfaceGui.Time.Text
+								if TimeText == "1s" or TimeText == "0s" then
+									RootPart.CFrame = CFrame.new(button.Base.Position) * CFrame.new(0, 5, 0)
+									task.wait(0.2)
+									ReplicatedStorage.voidSky.Remotes.Server.Objects.BuyButton:FireServer(button)
+									task.wait(0.2)
+									RootPart.CFrame = OriginalCFrame
+									task.wait(1) -- Break loop to prevent spam
+									return
+								end
+							end
+						end
+						break
+					end
+				end
+				task.wait(1)
+			end)
+		end
+	end)
+end
+
+Window:AddLabel({
+	text = "YouTube: crack by romd3976",
+})
+
+Library:Init()
+
+-- Instant Proximity Prompt
+ProximityPromptService.PromptButtonHoldBegan:Connect(function(Prompt)
+	fireproximityprompt(Prompt)
+end)
