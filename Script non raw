@@ -1,0 +1,139 @@
+--// GUI Setup
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local gui = Instance.new("ScreenGui", player.PlayerGui)
+gui.ResetOnSpawn = false
+gui.Name = "RawConverterGui"
+
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 350, 0, 180)
+frame.Position = UDim2.new(0.5, -175, 0.35, 0)
+frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+frame.Active = true
+frame.Draggable = true
+Instance.new("UICorner", frame)
+
+local label = Instance.new("TextLabel", frame)
+label.Size = UDim2.new(1, 0, 0, 30)
+label.BackgroundTransparency = 1
+label.Text = "RAW Converter"
+label.TextColor3 = Color3.fromRGB(255,255,255)
+label.Font = Enum.Font.GothamBold
+label.TextSize = 18
+
+local textbox = Instance.new("TextBox", frame)
+textbox.Size = UDim2.new(1, -20, 0, 40)
+textbox.Position = UDim2.new(0, 10, 0, 40)
+textbox.Text = ""
+textbox.ClearTextOnFocus = false
+textbox.Font = Enum.Font.Gotham
+textbox.TextSize = 15
+textbox.BackgroundColor3 = Color3.fromRGB(60,60,60)
+textbox.TextColor3 = Color3.fromRGB(255,255,255)
+Instance.new("UICorner", textbox)
+
+local convertBtn = Instance.new("TextButton", frame)
+convertBtn.Size = UDim2.new(1, -20, 0, 40)
+convertBtn.Position = UDim2.new(0, 10, 0, 95)
+convertBtn.Text = "Convert"
+convertBtn.Font = Enum.Font.GothamBold
+convertBtn.TextSize = 16
+convertBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+convertBtn.TextColor3 = Color3.fromRGB(255,255,255)
+Instance.new("UICorner", convertBtn)
+
+local function convertLink(link)
+
+    --------------------------
+    -- Pastebin RAW Handler --
+    --------------------------
+    if link:find("pastebin.com/raw/") then
+        return link:gsub("pastebin.com/raw/", "pastebin.com/")
+    end
+
+    if link:find("pastebin.com/") and not link:find("pastebin.com/raw/") then
+        local code = link:match("pastebin.com/(%w+)$")
+        if code then
+            return "https://pastebin.com/raw/" .. code
+        end
+    end
+
+    -------------------------
+    -- Pastefy RAW Handler --
+    -------------------------
+    if link:find("pastefy.app/.+/raw$") then
+        return link:gsub("/raw", "")
+    end
+
+    if link:find("pastefy%.app/") and not link:find("/raw") then
+        local code = link:match("pastefy%.app/([%w-_]+)$")
+        if code then
+            return "https://pastefy.app/" .. code .. "/raw"
+        end
+    end
+
+    ---------------------------
+    -- Paste.centos RAW Fix  --
+    ---------------------------
+    if link:find("paste%.centos%.org/view/raw/") then
+        return link:gsub("view/raw/", "view/")
+    end
+
+    if link:find("paste%.centos%.org/view/") and not link:find("/raw/") then
+        local code = link:match("paste%.centos%.org/view/(%w+)$")
+        if code then
+            return "https://paste.centos.org/view/raw/" .. code
+        end
+    end
+
+    ------------------------------
+    -- paste.laravel.io Handler --
+    ------------------------------
+    link = link:gsub("^%s+", ""):gsub("%s+$", "")
+
+    if link:match("^https?://paste%.laravel%.io/.+/raw/?$") then
+        return link:gsub("/raw/?$", "")
+    end
+
+    if link:match("^https?://paste%.laravel%.io/") and not link:match("/raw") then
+        local code = link:match("paste%.laravel%.io/([^/]+)$")
+        if code then
+            return "https://paste.laravel.io/" .. code .. "/raw"
+        end
+    end
+
+    --------------------------------
+    -- GitHub Gist RAW Handler     --
+    --------------------------------
+
+    -- RAW → NON-RAW
+    if link:match("^https?://gist%.githubusercontent%.com/") then
+        local user, gistId = link:match("gist%.githubusercontent%.com/([^/]+)/([^/]+)/raw")
+        if user and gistId then
+            return "https://gist.github.com/" .. user .. "/" .. gistId
+        end
+    end
+
+    -- NON-RAW → RAW
+    if link:match("^https?://gist%.github%.com/") and not link:find("raw") then
+        local user, gistId = link:match("gist%.github%.com/([^/]+)/([^/]+)")
+        if user and gistId then
+            return "https://gist.githubusercontent.com/" .. user .. "/" .. gistId .. "/raw"
+        end
+    end
+
+    return link
+end
+
+--// Button Event
+convertBtn.MouseButton1Click:Connect(function()
+    local input = textbox.Text
+
+    if input == "" then
+        textbox.Text = "Bạn chưa nhập link!"
+        return
+    end
+
+    textbox.Text = convertLink(input)
+end)
