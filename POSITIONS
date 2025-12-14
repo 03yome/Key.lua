@@ -1,0 +1,227 @@
+--// SERVICES
+local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
+local player = Players.LocalPlayer
+
+--// PATH
+local ROOT = "Delta/Workspace/SavePositions"
+local SAVED = ROOT.."/Saved"
+
+--// CREATE FOLDERS
+pcall(function()
+    if not isfolder("Delta") then makefolder("Delta") end
+    if not isfolder("Delta/Workspace") then makefolder("Delta/Workspace") end
+    if not isfolder(ROOT) then makefolder(ROOT) end
+    if not isfolder(SAVED) then makefolder(SAVED) end
+end)
+
+--// GUI ROOT
+local ScreenGui = Instance.new("ScreenGui", player.PlayerGui)
+ScreenGui.Name = "SavePositionGui"
+ScreenGui.ResetOnSpawn = false
+
+--// MAIN FRAME
+local Frame = Instance.new("Frame", ScreenGui)
+Frame.Size = UDim2.new(0, 380, 0, 420)
+Frame.Position = UDim2.new(0.5, -190, 0.3, 0)
+Frame.BackgroundColor3 = Color3.fromRGB(30,30,30)
+Frame.Active = true
+Frame.Draggable = true
+Instance.new("UICorner", Frame)
+
+local fullSize = Frame.Size
+local minimized = false
+
+--// TITLE
+local Title = Instance.new("TextLabel", Frame)
+Title.Size = UDim2.new(1, -40, 0, 32)
+Title.Text = "SAVE POSITIONS"
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 16
+Title.TextColor3 = Color3.new(1,1,1)
+Title.BackgroundTransparency = 1
+
+--// MINIMIZE
+local MinBtn = Instance.new("TextButton", Frame)
+MinBtn.Size = UDim2.new(0, 28, 0, 28)
+MinBtn.Position = UDim2.new(1, -32, 0, 2)
+MinBtn.Text = "-"
+MinBtn.Font = Enum.Font.GothamBold
+MinBtn.TextSize = 18
+MinBtn.BackgroundColor3 = Color3.fromRGB(70,70,70)
+MinBtn.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", MinBtn)
+
+--// SAVE BUTTON
+local SaveBtn = Instance.new("TextButton", Frame)
+SaveBtn.Size = UDim2.new(1, -20, 0, 34)
+SaveBtn.Position = UDim2.new(0, 10, 0, 40)
+SaveBtn.Text = "SAVE CURRENT POSITION"
+SaveBtn.Font = Enum.Font.GothamBold
+SaveBtn.TextSize = 14
+SaveBtn.BackgroundColor3 = Color3.fromRGB(0,170,255)
+SaveBtn.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", SaveBtn)
+
+--// CLEAR BUTTON
+local ClearBtn = Instance.new("TextButton", Frame)
+ClearBtn.Size = UDim2.new(1, -20, 0, 30)
+ClearBtn.Position = UDim2.new(0, 10, 0, 80)
+ClearBtn.Text = "CLEAR NOT SAVED"
+ClearBtn.Font = Enum.Font.GothamBold
+ClearBtn.TextSize = 13
+ClearBtn.BackgroundColor3 = Color3.fromRGB(200,60,60)
+ClearBtn.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", ClearBtn)
+
+--// TAB BUTTONS
+local TabNotSaved = Instance.new("TextButton", Frame)
+TabNotSaved.Size = UDim2.new(0.5, -12, 0, 28)
+TabNotSaved.Position = UDim2.new(0, 10, 0, 120)
+TabNotSaved.Text = "NOT SAVED"
+TabNotSaved.Font = Enum.Font.GothamBold
+TabNotSaved.TextSize = 13
+TabNotSaved.BackgroundColor3 = Color3.fromRGB(0,170,255)
+TabNotSaved.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", TabNotSaved)
+
+local TabSaved = Instance.new("TextButton", Frame)
+TabSaved.Size = UDim2.new(0.5, -12, 0, 28)
+TabSaved.Position = UDim2.new(0.5, 2, 0, 120)
+TabSaved.Text = "SAVED"
+TabSaved.Font = Enum.Font.GothamBold
+TabSaved.TextSize = 13
+TabSaved.BackgroundColor3 = Color3.fromRGB(60,60,60)
+TabSaved.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", TabSaved)
+
+--// SCROLLING FRAMES
+local function createList()
+    local f = Instance.new("ScrollingFrame", Frame)
+    f.Position = UDim2.new(0, 10, 0, 155)
+    f.Size = UDim2.new(1, -20, 1, -165)
+    f.CanvasSize = UDim2.new(0,0,0,0)
+    f.ScrollBarImageTransparency = 0.3
+    f.BackgroundColor3 = Color3.fromRGB(20,20,20)
+    f.BorderSizePixel = 0
+    Instance.new("UICorner", f)
+
+    local list = Instance.new("UIListLayout", f)
+    list.Padding = UDim.new(0,6)
+    list:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        f.CanvasSize = UDim2.new(0,0,0,list.AbsoluteContentSize.Y + 6)
+    end)
+
+    return f
+end
+
+local NotSaved = createList()
+local Saved = createList()
+Saved.Visible = false
+
+--// TAB LOGIC
+local function selectTab(tab)
+    if tab == "NotSaved" then
+        NotSaved.Visible = true
+        Saved.Visible = false
+        TabNotSaved.BackgroundColor3 = Color3.fromRGB(0,170,255)
+        TabSaved.BackgroundColor3 = Color3.fromRGB(60,60,60)
+    else
+        NotSaved.Visible = false
+        Saved.Visible = true
+        TabNotSaved.BackgroundColor3 = Color3.fromRGB(60,60,60)
+        TabSaved.BackgroundColor3 = Color3.fromRGB(0,170,255)
+    end
+end
+
+TabNotSaved.MouseButton1Click:Connect(function()
+    selectTab("NotSaved")
+end)
+
+TabSaved.MouseButton1Click:Connect(function()
+    selectTab("Saved")
+end)
+
+--// CREATE POSITION BUTTON
+local function createPosition(parent, cf, canSave)
+    local p = cf.Position
+
+    local btn = Instance.new("TextButton", parent)
+    btn.Size = UDim2.new(1, -6, 0, 36)
+    btn.BackgroundColor3 = Color3.fromRGB(45,45,45)
+    btn.TextColor3 = Color3.fromRGB(230,230,230)
+    btn.Font = Enum.Font.Code
+    btn.TextSize = 13
+    btn.TextXAlignment = Enum.TextXAlignment.Left
+    btn.Text = string.format("X=%d  Y=%d  Z=%d", p.X, p.Y, p.Z)
+    Instance.new("UICorner", btn)
+
+    btn.MouseButton1Click:Connect(function()
+        local char = player.Character or player.CharacterAdded:Wait()
+        char:WaitForChild("HumanoidRootPart").CFrame = cf
+    end)
+
+    if canSave then
+        local saveIcon = Instance.new("TextButton", btn)
+        saveIcon.Size = UDim2.new(0, 28, 0, 28)
+        saveIcon.Position = UDim2.new(1, -32, 0, 4)
+        saveIcon.Text = "💾"
+        saveIcon.Font = Enum.Font.GothamBold
+        saveIcon.TextSize = 14
+        saveIcon.BackgroundColor3 = Color3.fromRGB(0,170,255)
+        saveIcon.TextColor3 = Color3.new(1,1,1)
+        Instance.new("UICorner", saveIcon)
+
+        saveIcon.MouseButton1Click:Connect(function()
+            local data = {cf:GetComponents()}
+            writefile(SAVED.."/"..os.time()..".json", HttpService:JSONEncode(data))
+            btn:Destroy()
+            createPosition(Saved, cf, false)
+        end)
+    end
+end
+
+--// SAVE CURRENT
+SaveBtn.MouseButton1Click:Connect(function()
+    local char = player.Character or player.CharacterAdded:Wait()
+    local hrp = char:WaitForChild("HumanoidRootPart")
+    createPosition(NotSaved, hrp.CFrame, true)
+end)
+
+--// CLEAR NOT SAVED
+ClearBtn.MouseButton1Click:Connect(function()
+    for _,v in ipairs(NotSaved:GetChildren()) do
+        if v:IsA("TextButton") then
+            v:Destroy()
+        end
+    end
+end)
+
+--// LOAD SAVED FILES
+for _,file in ipairs(listfiles(SAVED)) do
+    local data = HttpService:JSONDecode(readfile(file))
+    createPosition(Saved, CFrame.new(unpack(data)), false)
+end
+
+--// MINIMIZE
+MinBtn.MouseButton1Click:Connect(function()
+    minimized = not minimized
+    if minimized then
+        Frame.Size = UDim2.new(Frame.Size.X.Scale, Frame.Size.X.Offset, 0, 34)
+        SaveBtn.Visible = false
+        ClearBtn.Visible = false
+        TabNotSaved.Visible = false
+        TabSaved.Visible = false
+        NotSaved.Visible = false
+        Saved.Visible = false
+        MinBtn.Text = "+"
+    else
+        Frame.Size = fullSize
+        SaveBtn.Visible = true
+        ClearBtn.Visible = true
+        TabNotSaved.Visible = true
+        TabSaved.Visible = true
+        selectTab("NotSaved")
+        MinBtn.Text = "-"
+    end
+end)
