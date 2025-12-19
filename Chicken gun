@@ -54,6 +54,28 @@ end
 
 print("HI")
 end)
+
+:GetService("Players").LocalPlayer.Character:WaitForChild("hAnDgUn"):WaitForChild("Events"):WaitForChild("SpareAmmoEvent"):FireServer(unpack(args))
+print("HI")
+end)
+
+local KillingCheats = PhantomForcesWindow:NewSection("Badge")
+KillingCheats:CreateButton("PitchFork", function()
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local badgeFolder = player:WaitForChild("BadgeFolder")
+
+local boolValue = badgeFolder:FindFirstChild("1660347036121491")
+if boolValue and boolValue:IsA("BoolValue") then
+    boolValue.Value = true  -- Bật (tick)
+    -- boolValue.Value = false -- Tắt (bỏ tick)
+end
+
+print("HI")
+end)
+
 KillingCheats:CreateButton("idk", function()
 -- LocalScript (StarterPlayerScripts hoặc chạy ở client)
 local Players = game:GetService("Players")
