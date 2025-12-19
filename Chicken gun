@@ -202,6 +202,24 @@ game:GetService("ReplicatedStorage").Events.ToolsEvent:FireServer(unpack(args))
 print("HI")
 end)
 
+KillingCheats:CreateButton("LightSaber", function()
+local args = {
+    [1] = game:GetService("Players").LocalPlayer.WeaponsInventory.Lightsaber
+}
+
+game:GetService("ReplicatedStorage").Events.ToolsEvent:FireServer(unpack(args))
+print("HI")
+end)
+
+KillingCheats:CreateButton("Stick", function()
+local args = {
+    [1] = game:GetService("Players").LocalPlayer.WeaponsInventory.Stick
+}
+
+game:GetService("ReplicatedStorage").Events.ToolsEvent:FireServer(unpack(args))
+print("HI")
+end)
+
 local KillingCheats = PhantomForcesWindow:NewSection("create")
 KillingCheats:CreateButton("by Romd3907", function()
 print("HI")
