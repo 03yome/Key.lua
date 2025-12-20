@@ -1,5 +1,5 @@
 local Library = loadstring(Game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
-local PhantomForcesWindow = Library:NewWindow("Chicken gun")
+local PhantomForcesWindow = Library:NewWindow("Chicken gun zombie")
 local KillingCheats = PhantomForcesWindow:NewSection("guns")
 KillingCheats:CreateButton("Inf sniper", function()
 local args = {
