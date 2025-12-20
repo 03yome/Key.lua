@@ -41,8 +41,8 @@ end)
 local KillingCheats = PhantomForcesWindow:NewSection("free")
 KillingCheats:CreateButton("spawn zombiepss", function()
 local args = {
-	CFrame.new(-1.0623393058776855, 117.4569091796875, -112.91244506835938, -0.9984816312789917, 1.8190542405704946e-08, 0.055085789412260056, 1.673473093433131e-08, 1, -2.688936717731849e-08, -0.055085789412260056, -2.5926693680844437e-08, -0.9984816312789917),
-	game:GetService("ReplicatedStorage"):WaitForChild("SpawnableNpc"):WaitForChild("TrashUndeadRudy")
+	CFrame.new(0.2028714418411255, 123.1938247680664, -133.7035369873047, -0.9970430135726929, 6.384958339822333e-08, -0.07684578001499176, 7.217342101739632e-08, 1, -1.0554152396480276e-07, 0.07684579491615295, -1.1077565886807861e-07, -0.9970430135726929),
+	"TrashUndeadRudy"
 }
 game:GetService("Players").LocalPlayer.Character:WaitForChild("Npc Spawner"):WaitForChild("HologramEvent"):FireServer(unpack(args))
 
