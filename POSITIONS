@@ -22,7 +22,7 @@ ScreenGui.ResetOnSpawn = false
 
 --// MAIN FRAME
 local Frame = Instance.new("Frame", ScreenGui)
-Frame.Size = UDim2.new(0, 380, 0, 420)
+Frame.Size = UDim2.new(0, 380, 0, 500)
 Frame.Position = UDim2.new(0.5, -190, 0.3, 0)
 Frame.BackgroundColor3 = Color3.fromRGB(30,30,30)
 Frame.Active = true
@@ -99,7 +99,7 @@ Instance.new("UICorner", TabSaved)
 local function createList()
     local f = Instance.new("ScrollingFrame", Frame)
     f.Position = UDim2.new(0, 10, 0, 155)
-    f.Size = UDim2.new(1, -20, 1, -165)
+    f.Size = UDim2.new(1, -20, 1, -245)
     f.CanvasSize = UDim2.new(0,0,0,0)
     f.ScrollBarImageTransparency = 0.3
     f.BackgroundColor3 = Color3.fromRGB(20,20,20)
@@ -116,19 +116,19 @@ local function createList()
 end
 
 local NotSaved = createList()
-local Saved = createList()
-Saved.Visible = false
+local SavedList = createList()
+SavedList.Visible = false
 
 --// TAB LOGIC
 local function selectTab(tab)
     if tab == "NotSaved" then
         NotSaved.Visible = true
-        Saved.Visible = false
+        SavedList.Visible = false
         TabNotSaved.BackgroundColor3 = Color3.fromRGB(0,170,255)
         TabSaved.BackgroundColor3 = Color3.fromRGB(60,60,60)
     else
         NotSaved.Visible = false
-        Saved.Visible = true
+        SavedList.Visible = true
         TabNotSaved.BackgroundColor3 = Color3.fromRGB(60,60,60)
         TabSaved.BackgroundColor3 = Color3.fromRGB(0,170,255)
     end
@@ -143,7 +143,7 @@ TabSaved.MouseButton1Click:Connect(function()
 end)
 
 --// CREATE POSITION BUTTON
-local function createPosition(parent, cf, canSave)
+local function createPositionButton(parent, cf, canSave)
     local p = cf.Position
 
     local btn = Instance.new("TextButton", parent)
@@ -176,7 +176,7 @@ local function createPosition(parent, cf, canSave)
             local data = {cf:GetComponents()}
             writefile(SAVED.."/"..os.time()..".json", HttpService:JSONEncode(data))
             btn:Destroy()
-            createPosition(Saved, cf, false)
+            createPositionButton(SavedList, cf, false)
         end)
     end
 end
@@ -185,7 +185,7 @@ end
 SaveBtn.MouseButton1Click:Connect(function()
     local char = player.Character or player.CharacterAdded:Wait()
     local hrp = char:WaitForChild("HumanoidRootPart")
-    createPosition(NotSaved, hrp.CFrame, true)
+    createPositionButton(NotSaved, hrp.CFrame, true)
 end)
 
 --// CLEAR NOT SAVED
@@ -200,8 +200,67 @@ end)
 --// LOAD SAVED FILES
 for _,file in ipairs(listfiles(SAVED)) do
     local data = HttpService:JSONDecode(readfile(file))
-    createPosition(Saved, CFrame.new(unpack(data)), false)
+    createPositionButton(SavedList, CFrame.new(unpack(data)), false)
 end
+
+--// ===== NEW INPUT / TELEPORT =====
+
+local InputLabel = Instance.new("TextLabel", Frame)
+InputLabel.Size = UDim2.new(1, -20, 0, 24)
+InputLabel.Position = UDim2.new(0, 10, 1, -70)
+InputLabel.BackgroundTransparency = 1
+InputLabel.Text = "Enter Position or CFrame (x y z  rx ry rz):"
+InputLabel.TextColor3 = Color3.new(1,1,1)
+InputLabel.Font = Enum.Font.Gotham
+InputLabel.TextSize = 14
+
+local InputBox = Instance.new("TextBox", Frame)
+InputBox.Size = UDim2.new(1, -20, 0, 28)
+InputBox.Position = UDim2.new(0, 10, 1, -45)
+InputBox.PlaceholderText = "10 50 20       or       10 50 20 0 90 0"
+InputBox.ClearTextOnFocus = false
+InputBox.TextColor3 = Color3.new(1,1,1)
+InputBox.BackgroundColor3 = Color3.fromRGB(50,50,50)
+InputBox.Font = Enum.Font.Gotham
+InputBox.TextSize = 14
+Instance.new("UICorner", InputBox)
+
+local GoBtn = Instance.new("TextButton", Frame)
+GoBtn.Size = UDim2.new(1, -20, 0, 30)
+GoBtn.Position = UDim2.new(0, 10, 1, -15)
+GoBtn.Text = "GO TO ENTERED"
+GoBtn.Font = Enum.Font.GothamBold
+GoBtn.TextSize = 14
+GoBtn.BackgroundColor3 = Color3.fromRGB(0,200,0)
+GoBtn.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", GoBtn)
+
+GoBtn.MouseButton1Click:Connect(function()
+    local text = InputBox.Text
+    local parts = {}
+    for num in string.gmatch(text, "%S+") do
+        table.insert(parts, tonumber(num))
+    end
+
+    if #parts == 3 then
+        -- position only
+        local pos = Vector3.new(parts[1], parts[2], parts[3])
+        local char = player.Character or player.CharacterAdded:Wait()
+        char:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(pos)
+    elseif #parts == 6 then
+        -- full cframe
+        local pos = Vector3.new(parts[1], parts[2], parts[3])
+        local rot = CFrame.Angles(
+            math.rad(parts[4]),
+            math.rad(parts[5]),
+            math.rad(parts[6])
+        )
+        local char = player.Character or player.CharacterAdded:Wait()
+        char:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(pos) * rot
+    else
+        warn("Invalid input format!")
+    end
+end)
 
 --// MINIMIZE
 MinBtn.MouseButton1Click:Connect(function()
@@ -213,7 +272,10 @@ MinBtn.MouseButton1Click:Connect(function()
         TabNotSaved.Visible = false
         TabSaved.Visible = false
         NotSaved.Visible = false
-        Saved.Visible = false
+        SavedList.Visible = false
+        InputLabel.Visible = false
+        InputBox.Visible = false
+        GoBtn.Visible = false
         MinBtn.Text = "+"
     else
         Frame.Size = fullSize
@@ -221,6 +283,11 @@ MinBtn.MouseButton1Click:Connect(function()
         ClearBtn.Visible = true
         TabNotSaved.Visible = true
         TabSaved.Visible = true
+        NotSaved.Visible = true
+        SavedList.Visible = true
+        InputLabel.Visible = true
+        InputBox.Visible = true
+        GoBtn.Visible = true
         selectTab("NotSaved")
         MinBtn.Text = "-"
     end
