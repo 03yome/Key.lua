@@ -44,14 +44,12 @@ convertBtn.TextColor3 = Color3.fromRGB(255,255,255)
 Instance.new("UICorner", convertBtn)
 
 local function convertLink(link)
-
     --------------------------
-    -- Pastebin RAW Handler --
+    -- Pastebin RAW Handler
     --------------------------
     if link:find("pastebin.com/raw/") then
         return link:gsub("pastebin.com/raw/", "pastebin.com/")
     end
-
     if link:find("pastebin.com/") and not link:find("pastebin.com/raw/") then
         local code = link:match("pastebin.com/(%w+)$")
         if code then
@@ -60,12 +58,11 @@ local function convertLink(link)
     end
 
     -------------------------
-    -- Pastefy RAW Handler --
+    -- Pastefy RAW Handler
     -------------------------
     if link:find("pastefy.app/.+/raw$") then
         return link:gsub("/raw", "")
     end
-
     if link:find("pastefy%.app/") and not link:find("/raw") then
         local code = link:match("pastefy%.app/([%w-_]+)$")
         if code then
@@ -74,12 +71,11 @@ local function convertLink(link)
     end
 
     ---------------------------
-    -- Paste.centos RAW Fix  --
+    -- Paste.centos RAW Fix
     ---------------------------
     if link:find("paste%.centos%.org/view/raw/") then
         return link:gsub("view/raw/", "view/")
     end
-
     if link:find("paste%.centos%.org/view/") and not link:find("/raw/") then
         local code = link:match("paste%.centos%.org/view/(%w+)$")
         if code then
@@ -87,7 +83,16 @@ local function convertLink(link)
         end
     end
 
-    ------------------------------
+    ----------------------------------
+    -- ScriptBlox → RawScripts Handler
+    ----------------------------------
+    if link:find("scriptblox.com/script/") then
+        local slug = link:match("scriptblox.com/script/(.+)$")
+        if slug then
+            return "https://rawscripts.net/raw/" .. slug
+        end
+    end
+------------------------------
     -- paste.laravel.io Handler --
     ------------------------------
     link = link:gsub("^%s+", ""):gsub("%s+$", "")
@@ -102,11 +107,9 @@ local function convertLink(link)
             return "https://paste.laravel.io/" .. code .. "/raw"
         end
     end
-
     --------------------------------
-    -- GitHub Gist RAW Handler     --
+    -- GitHub Gist RAW Handler
     --------------------------------
-
     -- RAW → NON-RAW
     if link:match("^https?://gist%.githubusercontent%.com/") then
         local user, gistId = link:match("gist%.githubusercontent%.com/([^/]+)/([^/]+)/raw")
@@ -114,7 +117,6 @@ local function convertLink(link)
             return "https://gist.github.com/" .. user .. "/" .. gistId
         end
     end
-
     -- NON-RAW → RAW
     if link:match("^https?://gist%.github%.com/") and not link:find("raw") then
         local user, gistId = link:match("gist%.github%.com/([^/]+)/([^/]+)")
@@ -126,14 +128,11 @@ local function convertLink(link)
     return link
 end
 
---// Button Event
 convertBtn.MouseButton1Click:Connect(function()
     local input = textbox.Text
-
     if input == "" then
         textbox.Text = "Bạn chưa nhập link!"
         return
     end
-
     textbox.Text = convertLink(input)
 end)
