@@ -1,0 +1,32 @@
+--[[
+ WARNING: Heads up! This script has not been verified by ScriptBlox.
+ Use at your own risk!
+]]
+-- May not work with games that have good anti-cheat
+
+local Workspace = game:GetService("Workspace")
+local ProximityPromptService = game:GetService("ProximityPromptService")
+
+-- Hàm cấu hình ProximityPrompt
+local function configureInfinitePrompt(instance: Instance)
+    if instance:IsA("ProximityPrompt") then
+        -- Instant
+        instance.HoldDuration = 0
+
+        -- Infinite distance
+        instance.MaxActivationDistance = math.huge
+
+        -- Disable line of sight
+        instance.RequiresLineOfSight = false
+    end
+end
+
+-- Áp dụng cho toàn bộ prompt hiện có
+for _, descendant: Instance in ipairs(Workspace:GetDescendants()) do
+    configureInfinitePrompt(descendant)
+end
+
+-- Áp dụng cho prompt spawn sau
+Workspace.DescendantAdded:Connect(function(descendant: Instance)
+    configureInfinitePrompt(descendant)
+end)
