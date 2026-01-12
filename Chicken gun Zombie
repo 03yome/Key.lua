@@ -114,6 +114,6 @@ print("HI")
 end)
 
 KillingCheats:CreateButton("next", function()
-loadstring(game:HttpGet('https://pastebin.com/raw/xLZaNJj7'))()
+loadstring(game:HttpGet('https://pastefy.app/ZadGyCoK/raw'))()
 print("HI")
 end)
