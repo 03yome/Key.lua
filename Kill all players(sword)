@@ -1,0 +1,134 @@
+local StarterGui = game:GetService("StarterGui")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+-- Loading GUI
+local LoadingGui = Instance.new("ScreenGui", PlayerGui)
+LoadingGui.Name = "SkibidiLoading"
+LoadingGui.ResetOnSpawn = false
+
+local LoadingFrame = Instance.new("Frame", LoadingGui)
+LoadingFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+LoadingFrame.Size = UDim2.new(0, 400, 0, 160)
+LoadingFrame.Position = UDim2.new(0.5, -200, 0.5, -80)
+Instance.new("UICorner", LoadingFrame).CornerRadius = UDim.new(0, 10)
+
+local TitleLabel = Instance.new("TextLabel", LoadingFrame)
+TitleLabel.Text = "Thanks For Using My Script"
+TitleLabel.Font = Enum.Font.GothamBlack
+TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleLabel.TextScaled = true
+TitleLabel.Size = UDim2.new(1, -20, 0, 50)
+TitleLabel.Position = UDim2.new(0, 10, 0, 5)
+TitleLabel.BackgroundTransparency = 1
+
+local LoadingText = Instance.new("TextLabel", LoadingFrame)
+LoadingText.Text = "Loading Please Wait..."
+LoadingText.Font = Enum.Font.Gotham
+LoadingText.TextColor3 = Color3.fromRGB(255, 255, 255)
+LoadingText.TextScaled = true
+LoadingText.Size = UDim2.new(1, -20, 0, 40)
+LoadingText.Position = UDim2.new(0, 10, 0, 60)
+LoadingText.BackgroundTransparency = 1
+
+local BarBack = Instance.new("Frame", LoadingFrame)
+BarBack.Size = UDim2.new(1, -41, 0, 20)
+BarBack.Position = UDim2.new(0, 20, 0.75, 0)
+BarBack.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+Instance.new("UICorner", BarBack).CornerRadius = UDim.new(0, 8)
+
+local BarFill = Instance.new("Frame", BarBack)
+BarFill.Size = UDim2.new(0, 0, 1, 0)
+BarFill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+Instance.new("UICorner", BarFill).CornerRadius = UDim.new(0, 8)
+
+for i = 1, 100 do
+    BarFill.Size = UDim2.new(i / 100, 0, 1, 0)
+    wait(0.025)
+end
+
+for i = 0, 1, 0.05 do
+    LoadingFrame.BackgroundTransparency = i
+    TitleLabel.TextTransparency = i
+    LoadingText.TextTransparency = i
+    BarBack.BackgroundTransparency = i
+    BarFill.BackgroundTransparency = i
+    wait()
+end
+
+LoadingGui:Destroy()
+
+-- Main Kill All GUI
+local MainGui = Instance.new("ScreenGui", PlayerGui)
+MainGui.Name = "KillAllUI"
+MainGui.ResetOnSpawn = false
+
+local MainFrame = Instance.new("Frame", MainGui)
+MainFrame.Size = UDim2.new(0, 250, 0, 90)
+MainFrame.Position = UDim2.new(0.5, -125, 0.5, -45)
+MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+MainFrame.Active = true
+MainFrame.Draggable = true
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
+
+local ToggleButton = Instance.new("TextButton", MainFrame)
+ToggleButton.Size = UDim2.new(1, -20, 0, 50)
+ToggleButton.Position = UDim2.new(0, 10, 0, 10)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+ToggleButton.TextColor3 = Color3.fromRGB(255, 0, 0)
+ToggleButton.Font = Enum.Font.GothamBold
+ToggleButton.TextScaled = true
+ToggleButton.Text = "Kill All: OFF"
+Instance.new("UICorner", ToggleButton).CornerRadius = UDim.new(0, 8)
+
+local CreditLabel = Instance.new("TextLabel", MainFrame)
+CreditLabel.Size = UDim2.new(1, -20, 0, 20)
+CreditLabel.Position = UDim2.new(0, 10, 0, 65)
+CreditLabel.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+CreditLabel.Text = "Made By 03y_o"
+CreditLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+CreditLabel.TextScaled = true
+CreditLabel.Font = Enum.Font.Gotham
+Instance.new("UICorner", CreditLabel).CornerRadius = UDim.new(0, 6)
+
+local Enabled = false
+
+ToggleButton.MouseButton1Click:Connect(function()
+    Enabled = not Enabled
+    ToggleButton.Text = Enabled and "Kill All: ON (Hold Sword)" or "Kill All: OFF"
+    ToggleButton.TextColor3 = Enabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+end)
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    if not Enabled then
+        return
+    end
+
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            local character = player.Character
+
+            if character
+                and character:FindFirstChild("HumanoidRootPart")
+                and character:FindFirstChild("Humanoid")
+                and character.Humanoid.Health > 0 then
+
+                if LocalPlayer:DistanceFromCharacter(character.HumanoidRootPart.Position) <= 1000000 then
+                    local tool = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Tool")
+
+                    if tool and tool:FindFirstChild("Handle") then
+                        tool:Activate()
+
+                        for _, part in pairs(character:GetChildren()) do
+                            if part:IsA("BasePart") then
+                                firetouchinterest(tool.Handle, part, 0)
+                                firetouchinterest(tool.Handle, part, 1)
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
