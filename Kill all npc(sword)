@@ -1,0 +1,124 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+-- Loading GUI
+local LoadingGui = Instance.new("ScreenGui", PlayerGui)
+LoadingGui.Name = "NPCKillLoading"
+LoadingGui.ResetOnSpawn = false
+
+local LoadingFrame = Instance.new("Frame", LoadingGui)
+LoadingFrame.BackgroundColor3 = Color3.fromRGB(30,30,30)
+LoadingFrame.Size = UDim2.new(0, 400, 0, 160)
+LoadingFrame.Position = UDim2.new(0.5, -200, 0.5, -80)
+Instance.new("UICorner", LoadingFrame).CornerRadius = UDim.new(0, 10)
+
+local Title = Instance.new("TextLabel", LoadingFrame)
+Title.Text = "Thanks For Using My Script"
+Title.Font = Enum.Font.GothamBlack
+Title.TextColor3 = Color3.new(1,1,1)
+Title.TextScaled = true
+Title.Size = UDim2.new(1,-20,0,50)
+Title.Position = UDim2.new(0,10,0,5)
+Title.BackgroundTransparency = 1
+
+local LoadingText = Instance.new("TextLabel", LoadingFrame)
+LoadingText.Text = "Loading Please Wait..."
+LoadingText.Font = Enum.Font.Gotham
+LoadingText.TextColor3 = Color3.new(1,1,1)
+LoadingText.TextScaled = true
+LoadingText.Size = UDim2.new(1,-20,0,40)
+LoadingText.Position = UDim2.new(0,10,0,60)
+LoadingText.BackgroundTransparency = 1
+
+local BarBack = Instance.new("Frame", LoadingFrame)
+BarBack.Size = UDim2.new(1,-40,0,20)
+BarBack.Position = UDim2.new(0,20,0.75,0)
+BarBack.BackgroundColor3 = Color3.fromRGB(50,50,50)
+Instance.new("UICorner", BarBack).CornerRadius = UDim.new(0,8)
+
+local BarFill = Instance.new("Frame", BarBack)
+BarFill.Size = UDim2.new(0,0,1,0)
+BarFill.BackgroundColor3 = Color3.fromRGB(0,255,0)
+Instance.new("UICorner", BarFill).CornerRadius = UDim.new(0,8)
+
+for i=1,100 do
+    BarFill.Size = UDim2.new(i/100,0,1,0)
+    task.wait(0.025)
+end
+
+LoadingGui:Destroy()
+
+-- Main GUI
+local MainGui = Instance.new("ScreenGui", PlayerGui)
+MainGui.Name = "KillAllNPCUI"
+MainGui.ResetOnSpawn = false
+
+local MainFrame = Instance.new("Frame", MainGui)
+MainFrame.Size = UDim2.new(0,250,0,90)
+MainFrame.Position = UDim2.new(0.5,-125,0.5,-45)
+MainFrame.BackgroundColor3 = Color3.fromRGB(30,30,30)
+MainFrame.Active = true
+MainFrame.Draggable = true
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0,10)
+
+local Btn = Instance.new("TextButton", MainFrame)
+Btn.Size = UDim2.new(1,-20,0,50)
+Btn.Position = UDim2.new(0,10,0,10)
+Btn.BackgroundColor3 = Color3.fromRGB(50,50,50)
+Btn.TextColor3 = Color3.fromRGB(255,0,0)
+Btn.Font = Enum.Font.GothamBold
+Btn.TextScaled = true
+Btn.Text = "Kill NPC: OFF"
+Instance.new("UICorner", Btn).CornerRadius = UDim.new(0,8)
+
+local Credit = Instance.new("TextLabel", MainFrame)
+Credit.Size = UDim2.new(1,-20,0,20)
+Credit.Position = UDim2.new(0,10,0,65)
+Credit.BackgroundColor3 = Color3.fromRGB(40,40,40)
+Credit.Text = "Made By 03y_o"
+Credit.TextColor3 = Color3.new(1,1,1)
+Credit.TextScaled = true
+Credit.Font = Enum.Font.Gotham
+Instance.new("UICorner", Credit).CornerRadius = UDim.new(0,6)
+
+local Enabled = false
+
+Btn.MouseButton1Click:Connect(function()
+    Enabled = not Enabled
+    Btn.Text = Enabled and "Kill NPC: ON (Hold Sword)" or "Kill NPC: OFF"
+    Btn.TextColor3 = Enabled and Color3.fromRGB(0,255,0) or Color3.fromRGB(255,0,0)
+end)
+
+task.spawn(function()
+    while task.wait(0.1) do
+        if not Enabled then continue end
+
+        local char = LocalPlayer.Character
+        if not char then continue end
+
+        local tool = char:FindFirstChildOfClass("Tool")
+        if not tool or not tool:FindFirstChild("Handle") then continue end
+
+        for _, npc in pairs(workspace:GetDescendants()) do
+            if npc:IsA("Model")
+            and npc ~= char
+            and npc:FindFirstChild("Humanoid")
+            and npc:FindFirstChild("HumanoidRootPart")
+            and npc.Humanoid.Health > 0
+            and not Players:GetPlayerFromCharacter(npc) then
+
+                tool:Activate()
+
+                for _, part in pairs(npc:GetChildren()) do
+                    if part:IsA("BasePart") then
+                        firetouchinterest(tool.Handle, part, 0)
+                        firetouchinterest(tool.Handle, part, 1)
+                    end
+                end
+            end
+        end
+    end
+end)
