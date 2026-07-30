@@ -1,0 +1,24 @@
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+local function updateShiftLockPosition()
+    local playerGui = localPlayer:WaitForChild("PlayerGui", 5)
+    if not playerGui then return end
+    
+    local mouseLock = playerGui:WaitForChild("MouseLock", 5)
+    if mouseLock then
+        local btn = mouseLock:WaitForChild("Btn", 5)
+        if btn then
+            btn.Position = UDim2.new(0.9, 10, 0.7, 0)
+        end
+    end
+end
+
+localPlayer.CharacterAdded:Connect(function()
+    task.wait(0.5)
+    updateShiftLockPosition()
+end)
+
+if localPlayer.Character then
+    updateShiftLockPosition()
+end
