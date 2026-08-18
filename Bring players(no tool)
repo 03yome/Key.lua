@@ -1,0 +1,441 @@
+--[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+if PlayerGui:FindFirstChild("PullPlayersGui") then
+    PlayerGui:FindFirstChild("PullPlayersGui"):Destroy()
+end
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "PullPlayersGui"
+screenGui.ResetOnSpawn = false
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.Parent = PlayerGui
+
+-- Main Frame
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 220, 0, 175)
+frame.Position = UDim2.new(0.5, -110, 0.1, 0)
+frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+frame.BorderSizePixel = 0
+frame.Active = true
+frame.Visible = true
+frame.Parent = screenGui
+
+local frameCorner = Instance.new("UICorner")
+frameCorner.CornerRadius = UDim.new(0, 10)
+frameCorner.Parent = frame
+
+local frameStroke = Instance.new("UIStroke")
+frameStroke.Color = Color3.fromRGB(80, 80, 80)
+frameStroke.Thickness = 1
+frameStroke.Parent = frame
+
+-- Title Bar
+local titleBar = Instance.new("TextLabel")
+titleBar.Size = UDim2.new(1, 0, 0, 35)
+titleBar.Position = UDim2.new(0, 0, 0, 0)
+titleBar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleBar.Text = "  ⠿  Player Puller"
+titleBar.Font = Enum.Font.GothamBold
+titleBar.TextSize = 14
+titleBar.TextXAlignment = Enum.TextXAlignment.Left
+titleBar.BorderSizePixel = 0
+titleBar.Parent = frame
+
+local titleCorner = Instance.new("UICorner")
+titleCorner.CornerRadius = UDim.new(0, 10)
+titleCorner.Parent = titleBar
+
+-- Credit Label
+local creditLabel = Instance.new("TextLabel")
+creditLabel.Size = UDim2.new(1, 0, 0, 18)
+creditLabel.Position = UDim2.new(0, 0, 0, 35)
+creditLabel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+creditLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+creditLabel.Text = "made by zsxan"
+creditLabel.Font = Enum.Font.Gotham
+creditLabel.TextSize = 11
+creditLabel.BorderSizePixel = 0
+creditLabel.Parent = frame
+
+-- Minimize Button
+local minBtn = Instance.new("TextButton")
+minBtn.Size = UDim2.new(0, 28, 0, 22)
+minBtn.Position = UDim2.new(1, -68, 0, 6)
+minBtn.BackgroundColor3 = Color3.fromRGB(200, 150, 0)
+minBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+minBtn.Text = "—"
+minBtn.Font = Enum.Font.GothamBold
+minBtn.TextSize = 14
+minBtn.BorderSizePixel = 0
+minBtn.Parent = frame
+
+local minCorner = Instance.new("UICorner")
+minCorner.CornerRadius = UDim.new(0, 5)
+minCorner.Parent = minBtn
+
+-- Close Button
+local closeBtn = Instance.new("TextButton")
+closeBtn.Size = UDim2.new(0, 28, 0, 22)
+closeBtn.Position = UDim2.new(1, -36, 0, 6)
+closeBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeBtn.Text = "✕"
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.TextSize = 14
+closeBtn.BorderSizePixel = 0
+closeBtn.Parent = frame
+
+local closeCorner = Instance.new("UICorner")
+closeCorner.CornerRadius = UDim.new(0, 5)
+closeCorner.Parent = closeBtn
+
+-- Lock Button
+local lockBtn = Instance.new("TextButton")
+lockBtn.Size = UDim2.new(0, 28, 0, 22)
+lockBtn.Position = UDim2.new(1, -100, 0, 6)
+lockBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+lockBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+lockBtn.Text = "🔓"
+lockBtn.Font = Enum.Font.GothamBold
+lockBtn.TextSize = 12
+lockBtn.BorderSizePixel = 0
+lockBtn.Parent = frame
+
+local lockCorner = Instance.new("UICorner")
+lockCorner.CornerRadius = UDim.new(0, 5)
+lockCorner.Parent = lockBtn
+
+-- Pull Button
+local pullBtn = Instance.new("TextButton")
+pullBtn.Size = UDim2.new(1, -20, 0, 45)
+pullBtn.Position = UDim2.new(0, 10, 0, 60)
+pullBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+pullBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+pullBtn.Text = "⬇  Bring Players"
+pullBtn.Font = Enum.Font.GothamBold
+pullBtn.TextSize = 15
+pullBtn.BorderSizePixel = 0
+pullBtn.Parent = frame
+
+local pullCorner = Instance.new("UICorner")
+pullCorner.CornerRadius = UDim.new(0, 8)
+pullCorner.Parent = pullBtn
+
+-- Unbring Button
+local unbringBtn = Instance.new("TextButton")
+unbringBtn.Size = UDim2.new(1, -20, 0, 45)
+unbringBtn.Position = UDim2.new(0, 10, 0, 118)
+unbringBtn.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
+unbringBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+unbringBtn.Text = "✖  Unbring Players"
+unbringBtn.Font = Enum.Font.GothamBold
+unbringBtn.TextSize = 15
+unbringBtn.BorderSizePixel = 0
+unbringBtn.Parent = frame
+
+local unbringCorner = Instance.new("UICorner")
+unbringCorner.CornerRadius = UDim.new(0, 8)
+unbringCorner.Parent = unbringBtn
+
+-- Minimized Bar
+local miniBar = Instance.new("Frame")
+miniBar.Size = UDim2.new(0, 160, 0, 32)
+miniBar.Position = frame.Position
+miniBar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+miniBar.BorderSizePixel = 0
+miniBar.Visible = false
+miniBar.Active = true
+miniBar.Parent = screenGui
+
+local miniBarCorner = Instance.new("UICorner")
+miniBarCorner.CornerRadius = UDim.new(0, 8)
+miniBarCorner.Parent = miniBar
+
+local miniBarStroke = Instance.new("UIStroke")
+miniBarStroke.Color = Color3.fromRGB(80, 80, 80)
+miniBarStroke.Thickness = 1
+miniBarStroke.Parent = miniBar
+
+local miniLabel = Instance.new("TextLabel")
+miniLabel.Size = UDim2.new(1, -60, 1, 0)
+miniLabel.Position = UDim2.new(0, 10, 0, 0)
+miniLabel.BackgroundTransparency = 1
+miniLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+miniLabel.Text = "⠿  Player Puller"
+miniLabel.Font = Enum.Font.GothamBold
+miniLabel.TextSize = 13
+miniLabel.TextXAlignment = Enum.TextXAlignment.Left
+miniLabel.Parent = miniBar
+
+local openBtn = Instance.new("TextButton")
+openBtn.Size = UDim2.new(0, 28, 0, 22)
+openBtn.Position = UDim2.new(1, -65, 0.5, -11)
+openBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+openBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+openBtn.Text = "▲"
+openBtn.Font = Enum.Font.GothamBold
+openBtn.TextSize = 12
+openBtn.BorderSizePixel = 0
+openBtn.Parent = miniBar
+
+local openCorner = Instance.new("UICorner")
+openCorner.CornerRadius = UDim.new(0, 5)
+openCorner.Parent = openBtn
+
+local miniCloseBtn = Instance.new("TextButton")
+miniCloseBtn.Size = UDim2.new(0, 28, 0, 22)
+miniCloseBtn.Position = UDim2.new(1, -33, 0.5, -11)
+miniCloseBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+miniCloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+miniCloseBtn.Text = "✕"
+miniCloseBtn.Font = Enum.Font.GothamBold
+miniCloseBtn.TextSize = 12
+miniCloseBtn.BorderSizePixel = 0
+miniCloseBtn.Parent = miniBar
+
+local miniCloseCorner = Instance.new("UICorner")
+miniCloseCorner.CornerRadius = UDim.new(0, 5)
+miniCloseCorner.Parent = miniCloseBtn
+
+-- Reopen Button
+local reopenBtn = Instance.new("TextButton")
+reopenBtn.Size = UDim2.new(0, 130, 0, 32)
+reopenBtn.Position = frame.Position
+reopenBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+reopenBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+reopenBtn.Text = "▲  Open Puller"
+reopenBtn.Font = Enum.Font.GothamBold
+reopenBtn.TextSize = 13
+reopenBtn.BorderSizePixel = 0
+reopenBtn.Visible = false
+reopenBtn.Active = true
+reopenBtn.Parent = screenGui
+
+local reopenCorner = Instance.new("UICorner")
+reopenCorner.CornerRadius = UDim.new(0, 8)
+reopenCorner.Parent = reopenBtn
+
+local reopenStroke = Instance.new("UIStroke")
+reopenStroke.Color = Color3.fromRGB(80, 80, 80)
+reopenStroke.Thickness = 1
+reopenStroke.Parent = reopenBtn
+
+-- State
+local isBringing = false
+local isLocked = false
+local dragging = false
+local dragStart = nil
+local startPos = nil
+local dragTarget = nil
+local connections = {}
+
+-- Helper: Get root part
+local function getRootPart(character)
+    return character:FindFirstChild("HumanoidRootPart")
+        or character:FindFirstChild("Torso")
+        or character:FindFirstChild("UpperTorso")
+end
+
+-- Helper: Seated check
+local function isOnVehicleOrSeat(character)
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not humanoid then return false end
+    if humanoid.SeatPart ~= nil then return true end
+    for _, part in ipairs(character:GetChildren()) do
+        if part:IsA("BasePart") then
+            local ok, touching = pcall(function() return part:GetTouchingParts() end)
+            if ok then
+                for _, t in ipairs(touching) do
+                    if t:IsA("VehicleSeat") or t:IsA("Seat") then return true end
+                end
+            end
+        end
+    end
+    return false
+end
+
+-- Helper: Unseat
+local function unseatPlayer(character)
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        humanoid.Jump = true
+        pcall(function() humanoid.SeatPart = nil end)
+    end
+end
+
+-- Helper: Remove Tools to prevent damage
+local function removeTools(character)
+    local player = Players:GetPlayerFromCharacter(character)
+    if player then
+        -- Xóa tool trong Backpack
+        local backpack = player:FindFirstChildOfClass("Backpack")
+        if backpack then
+            for _, tool in ipairs(backpack:GetChildren()) do
+                if tool:IsA("Tool") then
+                    tool:Destroy()
+                end
+            end
+        end
+    end
+    -- Xóa tool đang cầm trên tay nhân vật
+    for _, tool in ipairs(character:GetChildren()) do
+        if tool:IsA("Tool") then
+            tool:Destroy()
+        end
+    end
+end
+
+-- Dragging
+local function setupDrag(handle, target)
+    handle.InputBegan:Connect(function(input)
+        if isLocked then return end
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragTarget = target
+            dragStart = input.Position
+            startPos = target.Position
+        end
+    end)
+end
+
+setupDrag(titleBar, frame)
+setupDrag(creditLabel, frame)
+setupDrag(miniLabel, miniBar)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and dragTarget and not isLocked then
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            local delta = input.Position - dragStart
+            local newPos = UDim2.new(
+                startPos.X.Scale, startPos.X.Offset + delta.X,
+                startPos.Y.Scale, startPos.Y.Offset + delta.Y
+            )
+            dragTarget.Position = newPos
+            if dragTarget == frame then
+                miniBar.Position = newPos
+                reopenBtn.Position = newPos
+            elseif dragTarget == miniBar then
+                frame.Position = newPos
+                reopenBtn.Position = newPos
+            end
+        end
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = false
+        dragTarget = nil
+    end
+end)
+
+-- Lock
+lockBtn.MouseButton1Click:Connect(function()
+    isLocked = not isLocked
+    if isLocked then
+        lockBtn.Text = "🔒"
+        lockBtn.BackgroundColor3 = Color3.fromRGB(200, 150, 0)
+    else
+        lockBtn.Text = "🔓"
+        lockBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    end
+end)
+
+-- Minimize
+minBtn.MouseButton1Click:Connect(function()
+    frame.Visible = false
+    miniBar.Visible = true
+    reopenBtn.Visible = false
+end)
+
+-- Close from main
+closeBtn.MouseButton1Click:Connect(function()
+    frame.Visible = false
+    miniBar.Visible = false
+    reopenBtn.Visible = true
+end)
+
+-- Open from mini bar
+openBtn.MouseButton1Click:Connect(function()
+    frame.Visible = true
+    miniBar.Visible = false
+    reopenBtn.Visible = false
+end)
+
+-- Close from mini bar
+miniCloseBtn.MouseButton1Click:Connect(function()
+    frame.Visible = false
+    miniBar.Visible = false
+    reopenBtn.Visible = true
+end)
+
+-- Reopen
+reopenBtn.MouseButton1Click:Connect(function()
+    frame.Visible = true
+    miniBar.Visible = false
+    reopenBtn.Visible = false
+end)
+
+-- Bring Logic (Chỉ bring HumanoidRootPart và xóa sạch Tool)
+pullBtn.MouseButton1Click:Connect(function()
+    if isBringing then return end
+    isBringing = true
+    pullBtn.Text = "✔  Bringing..."
+    pullBtn.BackgroundColor3 = Color3.fromRGB(0, 160, 0)
+
+    for _, c in pairs(connections) do c:Disconnect() end
+    connections = {}
+
+    local loopConn = RunService.Heartbeat:Connect(function()
+        if not isBringing then return end
+
+        local myChar = LocalPlayer.Character
+        if not myChar then return end
+        local myRoot = getRootPart(myChar)
+        if not myRoot then return end
+
+        local myLockedCFrame = myRoot.CFrame
+        local frontPosition = (myLockedCFrame * CFrame.new(0, 0, -3)).Position
+        local targetCFrame = CFrame.new(frontPosition.X, myLockedCFrame.Position.Y, frontPosition.Z)
+
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                local otherChar = player.Character
+                if otherChar then
+                    local otherRoot = getRootPart(otherChar)
+                    if otherRoot then
+                        -- Xóa toàn bộ tool trong balo và trên tay để tránh gây sát thương
+                        removeTools(otherChar)
+
+                        if isOnVehicleOrSeat(otherChar) then unseatPlayer(otherChar) end
+                        
+                        -- Dịch chuyển phần gốc của player khác tới trước mặt bạn
+                        otherRoot.CFrame = targetCFrame
+                    end
+                end
+            end
+        end
+
+        myRoot.CFrame = myLockedCFrame
+    end)
+
+    table.insert(connections, loopConn)
+end)
+
+-- Unbring Logic
+unbringBtn.MouseButton1Click:Connect(function()
+    isBringing = false
+    for _, c in pairs(connections) do c:Disconnect() end
+    connections = {}
+    
+    pullBtn.Text = "⬇  Bring Players"
+    pullBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+end)
