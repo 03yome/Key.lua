@@ -1,0 +1,186 @@
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "FESeraphicGUI"
+ScreenGui.Parent = game.CoreGui
+
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, 220, 0, 160)
+Frame.Position = UDim2.new(0.5, -110, 0.5, -80)
+Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+Frame.BorderSizePixel = 0
+Frame.Active = true
+Frame.Draggable = true
+Frame.Parent = ScreenGui
+
+local UIStroke = Instance.new("UIStroke")
+UIStroke.Thickness = 1
+UIStroke.Color = Color3.fromRGB(0, 0, 0)
+UIStroke.Parent = Frame
+
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 10)
+UICorner.Parent = Frame
+
+local UIGradient = Instance.new("UIGradient")
+UIGradient.Rotation = 90
+UIGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 0, 0)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(20, 20, 20)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 0)),
+})
+UIGradient.Transparency = NumberSequence.new(0, 1)
+UIGradient.Parent = Frame
+
+local TitleLabel = Instance.new("TextLabel")
+TitleLabel.Size = UDim2.new(1, 0, 0, 30)
+TitleLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+TitleLabel.BorderSizePixel = 0
+TitleLabel.Text = "FE Seraphic Blade"
+TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleLabel.Font = Enum.Font.GothamBold
+TitleLabel.TextScaled = true
+TitleLabel.Parent = Frame
+
+local TitleCorner = Instance.new("UICorner")
+TitleCorner.CornerRadius = UDim.new(0, 8)
+TitleCorner.Parent = TitleLabel
+
+local TitleStroke = Instance.new("UIStroke")
+TitleStroke.Thickness = 1
+TitleStroke.Color = Color3.fromRGB(0, 0, 0)
+TitleStroke.Parent = TitleLabel
+
+local TextButton = Instance.new('TextButton')
+TextButton.Size = UDim2.new(0.8, 0, 0.2, 0)
+TextButton.Position = UDim2.new(0.1, 0, 0.25, 0)
+TextButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+TextButton.BorderSizePixel = 0
+TextButton.Text = 'Unleash Seraphic Blade'
+TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.Font = Enum.Font.GothamBold
+TextButton.TextScaled = true
+TextButton.Parent = Frame
+
+local UICorner3 = Instance.new("UICorner")
+UICorner3.CornerRadius = UDim.new(0, 8)
+UICorner3.Parent = TextButton
+
+local UIStroke3 = Instance.new("UIStroke")
+UIStroke3.Thickness = 1
+UIStroke3.Color = Color3.fromRGB(0, 0, 0)
+UIStroke3.Parent = TextButton
+
+local TextButton2 = Instance.new("TextButton")
+TextButton2.Size = UDim2.new(0.8, 0, 0.2, 0)
+TextButton2.Position = UDim2.new(0.1, 0, 0.5, 0)
+TextButton2.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+TextButton2.BorderSizePixel = 0
+TextButton2.Text = "Stop Anim"
+TextButton2.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton2.Font = Enum.Font.GothamBold
+TextButton2.TextScaled = true
+TextButton2.Parent = Frame
+
+local UICorner4 = Instance.new("UICorner")
+UICorner4.CornerRadius = UDim.new(0, 8)
+UICorner4.Parent = TextButton2
+
+local UIStroke4 = Instance.new("UIStroke")
+UIStroke4.Thickness = 1
+UIStroke4.Color = Color3.fromRGB(0, 0, 0)
+UIStroke4.Parent = TextButton2
+
+local TextButton3 = Instance.new("TextButton")
+TextButton3.Size = UDim2.new(0.8, 0, 0.2, 0)
+TextButton3.Position = UDim2.new(0.1, 0, 0.75, 0)
+TextButton3.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+TextButton3.BorderSizePixel = 0
+TextButton3.Text = "Touch Fling"
+TextButton3.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton3.Font = Enum.Font.GothamBold
+TextButton3.TextScaled = true
+TextButton3.Parent = Frame
+
+local UICorner5 = Instance.new("UICorner")
+UICorner5.CornerRadius = UDim.new(0, 8)
+UICorner5.Parent = TextButton3
+
+local UICorner5 = Instance.new("UIStroke")
+UICorner5.Thickness = 1
+UICorner5.Color = Color3.fromRGB(0, 0, 0)
+UICorner5.Parent = TextButton3
+
+local SeraphicBladeCode = [[
+loadstring(game:HttpGet("https://pastefy.app/MVr2V8BO/raw"))()
+loadstring(game:HttpGet("https://pastefy.app/JF0OD2v2/raw"))()
+loadstring(game:HttpGet("https://pastefy.app/xrs9wkP3/raw"))()
+loadstring(game:HttpGet("https://pastefy.app/NxlZ5KGi/raw"))()
+]]
+
+UnleashButton.MouseButton1Click:Connect(function()
+    loadstring(SeraphicBladeCode)()
+end)
+
+StopAnimButton.MouseButton1Click:Connect(function()
+    local Player = game.Players.LocalPlayer
+
+    for _, ToolName in ipairs({
+        "Punch",
+        "Defense",
+    }) do
+        local BackpackTool = Player.Backpack:FindFirstChild(ToolName)
+
+        if BackpackTool then
+            BackpackTool:Destroy()
+        end
+
+        local CharacterTool = Player.Character:FindFirstChild(ToolName)
+
+        if CharacterTool then
+            CharacterTool:Destroy()
+        end
+    end
+
+    local Character = Player.Character
+
+    if Character then
+        local Humanoid = Character:FindFirstChild("Humanoid")
+
+        if Humanoid then
+            local Animator = Humanoid:FindFirstChild("Animator")
+
+            if Animator then
+                for _, AnimationTrack in ipairs(
+                    Animator:GetPlayingAnimationTracks()
+                ) do
+                    AnimationTrack.Looped = false
+                    AnimationTrack:Stop(0)
+                end
+            end
+        end
+
+        for _, Connection in ipairs(
+            getconnections(game:GetService("RunService").Stepped)
+        ) do
+            Connection:Disable()
+        end
+
+        for _, Object in ipairs(Character:GetDescendants()) do
+            if Object:IsA("Highlight")
+                or Object:IsA("Part")
+                or Object:IsA("Sound") then
+
+                Object:Destroy()
+            end
+        end
+    end
+end)
+
+TextButton3.MouseButton1Click:Connect(function() loadstring(game:HttpGet("https://pastebin.com/raw/LgZwZ7ZB"))()
+end)
+
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Crack by 03y_o",
+    Text = "Stop Anim makes you reset!",
+    Duration = 7,
+    Button1 = "Alright",
+})
